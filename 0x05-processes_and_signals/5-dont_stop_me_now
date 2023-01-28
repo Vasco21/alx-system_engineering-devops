@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# process Requirements You must use kill
+
+kill "$(ps -x | pgrep -f beyond)"
