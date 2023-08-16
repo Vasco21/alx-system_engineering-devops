@@ -35,5 +35,5 @@ frontend www-https
 backend www-backend
     mode http
     balance roundrobin
-    server 117339-web-01 54.237.224.16:80 check
+    server 117339-web-01 100.24.236.4 check
     server 117339-web-02 34.227.90.186:80 check
