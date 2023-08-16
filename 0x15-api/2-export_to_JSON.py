@@ -1,53 +1,37 @@
 #!/usr/bin/python3
 """
-This script fetches employee TODO list data and exports it to a JSON file.
+Using https://jsonplaceholder.typicode.com
+gathers data from API and exports it to JSON file
+Implemented using recursion
 """
-
+import json
+import re
 import requests
 import sys
-import json
 
-def fetch_employee_data(employee_id):
-    """
-    Fetches employee data from the given employee ID.
-    """
-    base_url = 'https://jsonplaceholder.typicode.com/'
-    user_url = f'{base_url}users/{employee_id}'
-    todo_url = f'{base_url}todos?userId={employee_id}'
 
-    user_response = requests.get(user_url)
-    todo_response = requests.get(todo_url)
+API = "https://jsonplaceholder.typicode.com"
+"""REST API url"""
 
-    user_data = user_response.json()
-    todo_data = todo_response.json()
 
-    return user_data, todo_data
-
-def export_to_json(employee_id, employee_name, todo_data):
-    """
-    Exports TODO list data to a JSON file.
-    """
-    data_to_export = []
-    for task in todo_data:
-        data_to_export.append({
-            'task': task['title'],
-            'completed': task['completed'],
-            'username': employee_name
-        })
-
-    filename = f'{employee_id}.json'
-    with open(filename, 'w') as jsonfile:
-        json.dump({employee_id: data_to_export}, jsonfile, indent=4)
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <employee_id>")
-        sys.exit(1)
-
-    employee_id = int(sys.argv[1])
-    user_data, todo_data = fetch_employee_data(employee_id)
-
-    employee_name = user_data['username']
-    export_to_json(employee_id, employee_name, todo_data)
-
-    print(f'Data exported to {employee_id}.json')
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        if re.fullmatch(r'\d+', sys.argv[1]):
+            id = int(sys.argv[1])
+            user_res = requests.get('{}/users/{}'.format(API, id)).json()
+            todos_res = requests.get('{}/todos'.format(API)).json()
+            user_name = user_res.get('username')
+            todos = list(filter(lambda x: x.get('userId') == id, todos_res))
+            with open("{}.json".format(id), 'w') as json_file:
+                user_data = list(map(
+                    lambda x: {
+                        "task": x.get("title"),
+                        "completed": x.get("completed"),
+                        "username": user_name
+                    },
+                    todos
+                ))
+                user_data = {
+                    "{}".format(id): user_data
+                }
+                json.dump(user_data, json_file)
