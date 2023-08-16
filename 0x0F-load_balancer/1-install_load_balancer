@@ -44,4 +44,7 @@ backend servers
     balance roundrobin
     server 117339-web-01 100.24.236.4:80 check
     server 117339-web-02 52.91.117.219:80 check
+
 " >> /etc/haproxy/haproxy.cfg
+
+service haproxy restart

@@ -8,7 +8,7 @@ ERRORREDIRECT="\n\terror_page 404 /404error.html;\n\tlocation = /404error.html {
 CUSTOMHEADER='\n\tadd_header X-Served-By $hostname;\n'
 
 STRING="Hello World!"
-FOUR="Ceci n'est pas une page"
+FOUR="this is not page"
 
 apt-get -y update
 apt-get -y install nginx
