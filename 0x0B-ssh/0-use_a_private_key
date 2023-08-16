@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-# Connects to server 54.90.7.205 with key in ~/.ssh/school
+# Connects to server with key in ~/.ssh/school
 
-ssh -i ~/.ssh/school ubuntu@54.237.224.16
+ssh ubuntu -i ~/.ssh/school
