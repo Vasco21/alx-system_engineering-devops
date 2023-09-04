@@ -2,34 +2,43 @@
 """
 Querying the Reddit API recursively
 """
+
 import requests
 
+def recurse(subreddit, hot_list=None, after=None):
+    # Base case: If hot_list is None, initialize it as an empty list
+    if hot_list is None:
+        hot_list = []
 
-def recurse(subreddit, hot_list=[], after=None):
-    if type(subreddit) is not str:
-        return None
-    sub = subreddit
-    api_url = "https://api.reddit.com/r/{}/hot?after={}".format(sub, after)
-    headers = {'user-agent': 'safari:holberton/0.1.0'}
-    response = requests.get(api_url, headers=headers)
+    # Define the Reddit API URL for the given subreddit and after parameter
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+    params = {'limit': 100, 'after': after}
+
+    # Set a custom User-Agent to avoid Too Many Requests error
+    headers = {'User-Agent': 'Custom User Agent'}
+
+    # Send a GET request to the Reddit API
+    response = requests.get(url, headers=headers, params=params)
+
+    # Check if the response is successful (status code 200)
     if response.status_code == 200:
-        hot_posts = response.json()["data"]["children"]
-        after = response.json()["data"]["after"]
-        if after is None:
-            hot_list = titles(hot_posts, len(hot_posts))
+        data = response.json()
+        posts = data.get('data', {}).get('children', [])
+
+        # Extract titles from the posts and add them to the hot_list
+        titles = [post['data']['title'] for post in posts]
+        hot_list.extend(titles)
+
+        # Get the 'after' parameter for pagination
+        after = data.get('data', {}).get('after')
+
+        # If there's an 'after' parameter, recursively call recurse with it
+        if after:
+            recurse(subreddit, hot_list, after)
+        else:
+            # If there's no 'after' parameter, we've fetched all pages
             return hot_list
-        hot_list.append(recurse(subreddit, hot_list, after=after))
-        hot_list = titles(hot_posts, len(hot_posts))
     else:
+        # If the subreddit is invalid or there was an error, return None
         return None
-    return hot_list
 
-
-def titles(hot_list, length, titles_list=[]):
-    """
-    Gets titles of posts from the data
-    """
-    if length == 0:
-        return titles_list
-    titles_list.append(hot_list[length - 1]["data"]["title"])
-    return titles(hot_list, length - 1, titles_list)
