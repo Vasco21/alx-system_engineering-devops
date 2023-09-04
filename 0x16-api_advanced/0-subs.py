@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 """
-the number_of_subscribers function, which takes a subreddit name as input, sends a GET request to the Reddit API to retrieve information about the subreddit, and then extracts the number of subscribers from the JSON response. If the subreddit is invalid or there is an error, it returns 0.
+the number_of_subscribers function, which takes a subreddit name as input, 
+sends a GET request to the Reddit API to retrieve information about the subreddit,
+and then extracts the number of subscribers from the JSON response.
+If the subreddit is invalid or there is an error, it returns 0.
 """
 import requests
 
