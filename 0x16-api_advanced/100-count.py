@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Function to count words in all hot posts of a given Reddit subreddit."""
 
 import requests
 
@@ -46,3 +47,15 @@ def count_words(subreddit, word_list, after=None, counts=None):
     else:
         # If the subreddit is invalid or there was an error, print nothing
         return
+
+if __name__ == '__main__':
+    import sys
+
+    if len(sys.argv) < 3:
+        print("Usage: {} <subreddit> <list of keywords>".format(sys.argv[0]))
+        print("Ex: {} programming 'python java javascript'".format(sys.argv[0]))
+    else:
+        subreddit_name = sys.argv[1]
+        keywords = [x for x in sys.argv[2].split()]
+        count_words(subreddit_name, keywords)
+
