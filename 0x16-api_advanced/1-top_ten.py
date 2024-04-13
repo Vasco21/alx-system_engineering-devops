@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+"""
+Script to print hot posts on a given Reddit subreddit.
+"""
 import requests
 
 def top_ten(subreddit):
@@ -13,11 +17,3 @@ def top_ten(subreddit):
                 print(post['data']['title'])
     else:
         print(None)
-
-if __name__ == '__main__':
-    import sys
-    if len(sys.argv) < 2:
-        print("Please pass an argument for the subreddit to search.")
-    else:
-        subreddit = sys.argv[1]
-        top_ten(subreddit)
